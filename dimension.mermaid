@@ -1,0 +1,84 @@
+erDiagram
+    %% ===== Dimension Tables =====
+    dim_store {
+      INT store_id PK
+      VARCHAR store_address
+      INT city_id FK
+    }
+
+    dim_sales_type {
+      INT sales_type_id PK
+      VARCHAR type_name
+    }
+
+    dim_employee {
+      INT employee_id PK
+      VARCHAR first_name
+      VARCHAR last_name
+      INT birth_year
+    }
+
+    dim_product_type {
+      INT product_type_id PK
+      VARCHAR product_type_name
+    }
+
+    dim_product {
+      INT product_id PK
+      VARCHAR product_name
+      INT product_type_id FK
+    }
+
+    dim_week {
+      INT week_id PK
+      INT action_week
+    }
+
+    dim_month {
+      INT month_id PK
+      INT action_month
+    }
+
+    dim_year {
+      INT year_id PK
+      INT action_year
+    }
+
+    dim_weekday {
+      INT weekday_id PK
+      VARCHAR action_weekday
+    }
+
+    dim_time {
+      INT time_id PK
+      DATE action_date
+      INT week_id FK
+      INT month_id FK
+      INT year_id FK
+      INT weekday_id FK
+    }
+
+    %% ===== Fact Table =====
+    fact_sales {
+      INT product_id PK, FK
+      INT time_id PK, FK
+      INT store_id PK, FK
+      INT employee_id PK, FK
+      INT sales_type_id PK, FK
+      DECIMAL price "DECIMAL(8,2)"
+      DECIMAL quantity "DECIMAL(8,2)"
+    }
+
+    %% ===== Relationships =====
+    fact_sales }o--|| dim_product     : product_id
+    fact_sales }o--|| dim_time        : time_id
+    fact_sales }o--|| dim_store       : store_id
+    fact_sales }o--|| dim_employee    : employee_id
+    fact_sales }o--|| dim_sales_type  : sales_type_id
+
+    dim_product }o--|| dim_product_type : product_type_id
+
+    dim_time }o--|| dim_week    : week_id
+    dim_time }o--|| dim_month   : month_id
+    dim_time }o--|| dim_year    : year_id
+    dim_time }o--|| dim_weekday : weekday_id
