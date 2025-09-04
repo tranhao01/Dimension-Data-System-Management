@@ -1,0 +1,55 @@
+erDiagram
+    %% ===== Dimension Tables =====
+    dim_store {
+      INT store_id PK
+      VARCHAR store_address
+      VARCHAR city
+      VARCHAR region
+      VARCHAR state
+      VARCHAR country
+    }
+
+    dim_sales_type {
+      INT sales_type_id PK
+      VARCHAR type_name
+    }
+
+    dim_employee {
+      INT employee_id PK
+      VARCHAR first_name
+      VARCHAR last_name
+      INT birth_year
+    }
+
+    dim_time {
+      INT time_id PK
+      DATE action_date
+      INT action_week
+      INT action_month
+      INT action_year
+      VARCHAR action_weekday
+    }
+
+    dim_product {
+      INT product_id PK
+      VARCHAR product_name
+      VARCHAR product_type
+    }
+
+    %% ===== Fact Table =====
+    fact_sales {
+      INT product_id PK, FK
+      INT time_id PK, FK
+      INT store_id PK, FK
+      INT employee_id PK, FK
+      INT sales_type_id PK, FK
+      DECIMAL price "DECIMAL(8,2)"
+      DECIMAL quantity "DECIMAL(8,2)"
+    }
+
+    %% ===== Relationships (many facts to one dim) =====
+    fact_sales }o--|| dim_product     : product_id
+    fact_sales }o--|| dim_time        : time_id
+    fact_sales }o--|| dim_store       : store_id
+    fact_sales }o--|| dim_employee    : employee_id
+    fact_sales }o--|| dim_sales_type  : sales_type_id
